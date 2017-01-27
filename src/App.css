@@ -1,0 +1,23 @@
+.App {
+}
+
+.App-header {
+  height: 150px;
+  padding: 20px;
+}
+
+.Dropdown {
+  padding: 10px;
+  width: 150px;
+}
+
+.Dropdown-text {
+  padding-right: 0px;
+  width: 50%;
+}
+
+.Dropdown-menu {
+  float: right;
+  width: 50%;
+}
+
