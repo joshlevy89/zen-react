@@ -48,7 +48,7 @@ class App extends Component {
       <div className="App">
         <div className="App-header">
           <h2>Forecasting Malaria in Ethiopia</h2>
-          <div>{"Malaria cases showing: " + this.state.malaria_cases_showing}</div>
+          <div>{"Malaria cases: " + this.state.malaria_cases_showing}</div>
           <Dropdown
           update_dropdown_state={this.update_dropdown_state}
           state = {this.state} type = {"gender"}
