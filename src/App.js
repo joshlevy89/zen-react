@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
 import Dropdown from './Dropdown';
+import GeoJsonExample from './GeoJsonExample'
 
 class App extends Component {
 
   state = {
     malaria_cases_showing: 0,
+    malaria_perc_showing: 0,
     disag_dict: {}
   }
 
@@ -14,8 +16,12 @@ class App extends Component {
     var disag_dict = this.clean_disag_dict(this.state.disag_dict)
     axios.post('http://localhost:5000/zenysis-flask/api/v1.0/tasks', disag_dict)
     .then((response) => {
-      var malaria_cases = response.data.tot
-      this.setState({malaria_cases_showing: malaria_cases})
+      var cases = response.data.stats.cases
+      var pop = response.data.stats.pop
+      var perc = (cases/pop) * 100
+      var perc_rounded = Math.round(perc * 100)/100
+      this.setState({malaria_cases_showing: cases})
+      this.setState({malaria_perc_showing: perc_rounded})
     })
     .catch((error) => {
       alert(error)
@@ -48,7 +54,9 @@ class App extends Component {
       <div className="App">
         <div className="App-header">
           <h2>Forecasting Malaria in Ethiopia</h2>
-          <div>{"Malaria cases: " + this.state.malaria_cases_showing}</div>
+          <GeoJsonExample />
+          <div>{"Malaria cases: " + this.state.malaria_cases_showing +
+          " (" + this.state.malaria_perc_showing + "%)"}</div>
           <Dropdown
           update_dropdown_state={this.update_dropdown_state}
           state = {this.state} type = {"gender"}
