@@ -19,6 +19,10 @@ class App extends Component {
     }
   }
 
+  logToCons = (arg) => {
+    console.log(arg);
+  }
+
   get_malaria_projection=() => {
     var disag_dict = this.clean_disag_dict(this.state.disag_dict)
     axios.post('http://localhost:5000/zenysis-flask/api/v1.0/stats', disag_dict)
@@ -80,8 +84,8 @@ class App extends Component {
       <div className="App">
         <h2>Know More Malaria</h2>
         <div className="App-header">
+          <TestMap sendRegionName={this.logToCons} />
           <div className="Dropdown-list">
-            <TestMap />
             <div>{"Malaria cases: " + this.state.malaria_cases_showing +
             " (" + this.state.malaria_perc_showing + "%)"}</div>
             <Dropdown

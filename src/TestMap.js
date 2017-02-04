@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl';
+import './TestMap.css';
 
 export default class TestMap extends Component {
-  onComponentDidMount() {
-  }
-  render() {
-      mapboxgl.accessToken = 'pk.eyJ1Ijoiam9zaGxldnk4OSIsImEiOiJjaXlrZHVpNnUwMDBuMndqdm9jdnVlMTRwIn0.an0-fmOZ-15KzXSvgSa-TA';
+  componentDidMount() {
+     mapboxgl.accessToken = 'pk.eyJ1Ijoiam9zaGxldnk4OSIsImEiOiJjaXlrZHVpNnUwMDBuMndqdm9jdnVlMTRwIn0.an0-fmOZ-15KzXSvgSa-TA';
       var map = new mapboxgl.Map({
           container: 'map',
           style: 'mapbox://styles/mapbox/streets-v9',
@@ -33,13 +32,14 @@ export default class TestMap extends Component {
 
       // When a click event occurs near a polygon, open a popup at the location of
       // the feature, with description HTML from its properties.
-      map.on('click', function (e) {
+      map.on('click', (e) => {
           var features = map.queryRenderedFeatures(e.point, { layers: ['states-layer'] });
           if (!features.length) {
               return;
           }
 
           var feature = features[0];
+          this.props.sendRegionName(feature.properties.name);
 
           var popup = new mapboxgl.Popup()
               .setLngLat(map.unproject(e.point))
@@ -53,8 +53,10 @@ export default class TestMap extends Component {
           var features = map.queryRenderedFeatures(e.point, { layers: ['states-layer'] });
           map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
       });
+  }
+  render() {
     return (
-      <div id='map'>SDFDS</div>
+      <div id='map'></div>
     )
   }
 }
