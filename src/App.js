@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
 import Dropdown from './Dropdown';
+import Time_Series_Plot from './Time_Series_Plot'
+import TestMap from './TestMap'
 
 class App extends Component {
 
   state = {
     malaria_cases_showing: 0,
     malaria_perc_showing: 0,
+    time_series_showing: [],
     disag_dict: {
       'gender': ['all'],
       'year': ['2017'],
@@ -24,8 +27,7 @@ class App extends Component {
       var pop = response.data.stats.pop
       var perc = (cases/pop) * 100
       var perc_rounded = Math.round(perc * 100)/100
-      var cases_rounded = Math.round(cases) // needed for fractional projections
-      this.setState({malaria_cases_showing: cases_rounded})
+      this.setState({malaria_cases_showing: cases})
       this.setState({malaria_perc_showing: perc_rounded})
     })
     .catch((error) => {
@@ -34,11 +36,9 @@ class App extends Component {
 
     axios.post('http://localhost:5000/zenysis-flask/api/v1.0/time_series', disag_dict)
     .then((response) => {
-      var time_series = response.data.time_series
-      var dates_list = time_series.date
-      var stats_list = time_series.stats
-      var cases_list = stats_list.map(function(obj) {return obj.cases;});
-      console.log(cases_list)
+      var time_series = response.data.time_series.time_series
+      this.setState({time_series_showing: time_series})
+      console.log(time_series)
     })
     .catch((error) => {
       alert(error)
@@ -78,27 +78,33 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <h2>Know More Malaria</h2>
         <div className="App-header">
-          <h2>Know More Malaria</h2>
-          <div>{"Malaria cases: " + this.state.malaria_cases_showing +
-          " (" + this.state.malaria_perc_showing + "%)"}</div>
-          <Dropdown
-          update_dropdown_state={this.update_dropdown_state}
-          state = {this.state} type = {"gender"}
-          options = {['all', 'male', 'female']}/>
-          <Dropdown
-          update_dropdown_state={this.update_dropdown_state}
-          state = {this.state} type = {"year"}
-          options = {['2017', '2016', '2015', '2014']}/>
-          <Dropdown
-          update_dropdown_state={this.update_dropdown_state}
-          state = {this.state} type = {"age"}
-          options = {['all', '<5', '5-14', '>=15']}/>
-          <Dropdown
-          update_dropdown_state={this.update_dropdown_state}
-          state = {this.state} type = {"month"}
-          options = {this.get_month_list()}/>
-          <button onClick={() => this.get_malaria_projection()}>Calculate</button>
+          <div className="Dropdown-list">
+            <TestMap />
+            <div>{"Malaria cases: " + this.state.malaria_cases_showing +
+            " (" + this.state.malaria_perc_showing + "%)"}</div>
+            <Dropdown
+            update_dropdown_state={this.update_dropdown_state}
+            state = {this.state} type = {"gender"}
+            options = {['all', 'male', 'female']}/>
+            <Dropdown
+            update_dropdown_state={this.update_dropdown_state}
+            state = {this.state} type = {"year"}
+            options = {['2017', '2016', '2015', '2014']}/>
+            <Dropdown
+            update_dropdown_state={this.update_dropdown_state}
+            state = {this.state} type = {"age"}
+            options = {['all', '<5', '5-14', '>=15']}/>
+            <Dropdown
+            update_dropdown_state={this.update_dropdown_state}
+            state = {this.state} type = {"month"}
+            options = {this.get_month_list()}/>
+            <button onClick={() => this.get_malaria_projection()}>Calculate</button>
+          </div>
+          <div className="Time-series-plot">
+            <Time_Series_Plot data = {this.state.time_series_showing}/>
+          </div>
         </div>
       </div>
     );

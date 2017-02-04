@@ -2,8 +2,8 @@
 }
 
 .App-header {
-  height: 150px;
   padding: 20px;
+  border: solid;
 }
 
 .Dropdown {
@@ -19,5 +19,15 @@
 .Dropdown-menu {
   float: right;
   width: 50%;
+  display: inline-block;
 }
+
+.Dropdown-list {
+  margin-bottom: 30px;
+}
+
+.Time-series-plot {
+}
+
+
 
