@@ -1,4 +1,4 @@
-#map { height: 300px; width:100%; }
+#map { height: 270px; width:40%; }
 
 .mapboxgl-popup {
     max-width: 400px;

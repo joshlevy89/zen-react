@@ -25,7 +25,8 @@ class App extends Component {
 
   get_malaria_projection=() => {
     var disag_dict = this.clean_disag_dict(this.state.disag_dict)
-    axios.post('http://localhost:5000/zenysis-flask/api/v1.0/stats', disag_dict)
+    //console.log(disag_dict)
+    axios.post('https://zenysis-flask.herokuapp.com/zenysis-flask/api/v1.0/stats', disag_dict)
     .then((response) => {
       var cases = response.data.stats.cases
       var pop = response.data.stats.pop
@@ -38,7 +39,7 @@ class App extends Component {
       alert(error)
     });
 
-    axios.post('http://localhost:5000/zenysis-flask/api/v1.0/time_series', disag_dict)
+    axios.post('https://zenysis-flask.herokuapp.com/zenysis-flask/api/v1.0/time_series', disag_dict)
     .then((response) => {
       var time_series = response.data.time_series.time_series
       this.setState({time_series_showing: time_series})
