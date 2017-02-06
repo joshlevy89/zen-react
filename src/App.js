@@ -85,6 +85,8 @@ class App extends Component {
       <div className="App">
         <h2>Know More Malaria</h2>
         <div className="App-header">
+          <a target="_blank"
+          href="https://docs.google.com/presentation/d/1wQ_vliMepL890e72Ifq9oXc9GA6x8ale8tIGYLqwqbk/edit#slide=id.g35f391192_00">slides</a>
           <TestMap sendRegionName={this.logToCons} />
           <div className="Dropdown-list">
             <div>{"Malaria cases: " + this.state.malaria_cases_showing +
