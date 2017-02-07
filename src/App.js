@@ -17,15 +17,14 @@ class App extends Component {
 
   componentDidMount() {
     if (process.env.NODE_ENV === 'production') {
-      console.log('IN PROUDCTION')
       axios.get(BASE_URL + 'zenysis-flask/api/v1.0/wake_up')
-      .then((response) => {
-        console.log("WOKE UP")
-      })
-      .catch((error) => {
-        console.log("STILL SLEEPING")
-        alert(error)
-      });
+      // .then((response) => {
+      //   console.log("WOKE UP")
+      // })
+      // .catch((error) => {
+      //   console.log("STILL SLEEPING")
+      //   alert(error)
+      // });
     }
   }
 
