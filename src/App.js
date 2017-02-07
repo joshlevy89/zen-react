@@ -4,13 +4,25 @@ import './App.css';
 import Dropdown from './Dropdown';
 import Time_Series_Plot from './Time_Series_Plot'
 import TestMap from './TestMap'
+import { Button, Panel } from 'react-bootstrap';
+
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+      var BASE_URL = 'http://localhost:5000/'
+    }
+else {
+  var BASE_URL = 'https://zenysis-flask.herokuapp.com/'
+}
 
 class App extends Component {
 
+  componentDidMount() {
+  }
+
   state = {
-    malaria_cases_showing: 0,
-    malaria_perc_showing: 0,
+    malaria_cases_showing: null,
+    malaria_perc_showing: null,
     time_series_showing: [],
+    malaria_perc_change_showing: null,
     disag_dict: {
       'gender': ['all'],
       'year': ['2017'],
@@ -19,14 +31,19 @@ class App extends Component {
     }
   }
 
-  logToCons = (arg) => {
-    console.log(arg);
+  set_region = (arg) => {
+    this.setState({
+      ...this.state,
+      disag_dict: {
+        ...this.state.disag_dict,
+        'region': [arg]
+      }
+    });
   }
 
   get_malaria_projection=() => {
     var disag_dict = this.clean_disag_dict(this.state.disag_dict)
-    //console.log(disag_dict)
-    axios.post('https://zenysis-flask.herokuapp.com/zenysis-flask/api/v1.0/stats', disag_dict)
+    axios.post(BASE_URL + 'zenysis-flask/api/v1.0/stats', disag_dict)
     .then((response) => {
       var cases = response.data.stats.cases
       var pop = response.data.stats.pop
@@ -39,11 +56,12 @@ class App extends Component {
       alert(error)
     });
 
-    axios.post('https://zenysis-flask.herokuapp.com/zenysis-flask/api/v1.0/time_series', disag_dict)
+    axios.post(BASE_URL + 'zenysis-flask/api/v1.0/time_series', disag_dict)
     .then((response) => {
       var time_series = response.data.time_series.time_series
+      var perc_change = response.data.time_series.perc_change
       this.setState({time_series_showing: time_series})
-      console.log(time_series)
+      this.setState({malaria_perc_change_showing: perc_change})
     })
     .catch((error) => {
       alert(error)
@@ -83,35 +101,85 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h2>Know More Malaria</h2>
+        <a className="Slides-link"
+          target="_blank"
+          href="https://docs.google.com/presentation/d/1wQ_vliMepL890e72Ifq9oXc9GA6x8ale8tIGYLqwqbk/edit#slide=id.g35f391192_00">
+          check out slides
+        </a>
+        <h2 className="Title">Know More Malaria</h2>
         <div className="App-header">
-          <a target="_blank"
-          href="https://docs.google.com/presentation/d/1wQ_vliMepL890e72Ifq9oXc9GA6x8ale8tIGYLqwqbk/edit#slide=id.g35f391192_00">slides</a>
-          <TestMap sendRegionName={this.logToCons} />
-          <div className="Dropdown-list">
-            <div>{"Malaria cases: " + this.state.malaria_cases_showing +
-            " (" + this.state.malaria_perc_showing + "%)"}</div>
-            <Dropdown
-            update_dropdown_state={this.update_dropdown_state}
-            state = {this.state} type = {"gender"}
-            options = {['all', 'male', 'female']}/>
-            <Dropdown
-            update_dropdown_state={this.update_dropdown_state}
-            state = {this.state} type = {"year"}
-            options = {['2017', '2016', '2015', '2014']}/>
-            <Dropdown
-            update_dropdown_state={this.update_dropdown_state}
-            state = {this.state} type = {"age"}
-            options = {['all', '<5', '5-14', '>=15']}/>
-            <Dropdown
-            update_dropdown_state={this.update_dropdown_state}
-            state = {this.state} type = {"month"}
-            options = {this.get_month_list()}/>
-            <button onClick={() => this.get_malaria_projection()}>Calculate</button>
+          <div className="Selection-block">
+            <div className="Test-map">
+              {this.state.disag_dict.region ?
+                <div className="Region-select-text">
+                  {"Selected region: " + this.state.disag_dict.region[0]}
+                </div>:
+                <div className="Region-select-text">
+                  {"Selected region: country"}
+                </div>
+              }
+              <TestMap set_region={this.set_region} />
+            </div>
+            <div className="Dropdown-list">
+              <div className="Dropdown-select-text">Select by:</div>
+              <Dropdown
+              update_dropdown_state={this.update_dropdown_state}
+              state = {this.state} type = {"year"}
+              options = {['2017', '2016', '2015', '2014']}/>
+              <Dropdown
+              update_dropdown_state={this.update_dropdown_state}
+              state = {this.state} type = {"month"}
+              options = {this.get_month_list()}/>
+              <Dropdown
+              update_dropdown_state={this.update_dropdown_state}
+              state = {this.state} type = {"age"}
+              options = {['all', '<5', '5-14', '>=15']}/>
+              <Dropdown
+              update_dropdown_state={this.update_dropdown_state}
+              state = {this.state} type = {"gender"}
+              options = {['all', 'male', 'female']}/>
+              <Button className="Calculate-button"
+              onClick={() => this.get_malaria_projection()}
+              bsStyle="success"
+              bsSize="large">Calculate</Button>
+            </div>
+            <div className="Time-series-plot">
+              {this.state.malaria_cases_showing ?
+                (<div>
+                  <div className="Malaria-cases-text">
+                    {"Malaria cases: " + this.state.malaria_cases_showing +
+                    " (" + this.state.malaria_perc_showing + "%)"}
+                  </div>
+                  <div>
+                    <Time_Series_Plot data = {this.state.time_series_showing}/>
+                  </div>
+                  <div className="Recommendation-text">
+                    {this.state.malaria_perc_change_showing > 0 ?
+                      <Panel header="Malaria cases rising" bsStyle="danger">
+                        {"The malaria incidence at this time will be " +
+                        this.state.malaria_perc_change_showing + "% higher than usual."}
+                        <br/>
+                        {"Consider allocating resources to this population."}
+                      </Panel>:
+                       <Panel header="Malaria cases falling" bsStyle="info">
+                        {"The malaria incidence at this time will be " +
+                        Math.abs(this.state.malaria_perc_change_showing) + "% lower than usual."}
+                        <br/>
+                        {"This target population is relatively safe."}
+                      </Panel>
+                    }
+                  </div>
+                </div>)
+                :
+                (<p className="Instructions">
+                  For a malaria forecast, fill in the information on the left
+                  <br/>and click calculate.
+                </p>)
+              }
+            </div>
           </div>
-          <div className="Time-series-plot">
-            <Time_Series_Plot data = {this.state.time_series_showing}/>
-          </div>
+        </div>
+        <div>
         </div>
       </div>
     );

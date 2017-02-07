@@ -52,6 +52,7 @@
     "mapbox-gl": "^0.32.1",
     "path": "^0.12.7",
     "react": "^15.4.2",
+    "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.2",
     "react-leaflet": "^1.1.0",
     "recharts": "^0.20.5"
