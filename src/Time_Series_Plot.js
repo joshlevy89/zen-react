@@ -16,7 +16,7 @@ export default class Time_Series_Plot extends Component {
   render () {
     var axis_lims = this.get_axis_lims(this.props.data)
     return (
-      <LineChart className="Linechart" width={600} height={250} data={this.props.data}
+      <LineChart className="Linechart" width={690} height={250} data={this.props.data}
             margin={{top: 20, right: 80, bottom: 20, left: 20}}>
        <XAxis dataKey="date" label="date"/>
        <YAxis dataKey="cases" label="cases" domain={axis_lims}
@@ -24,7 +24,7 @@ export default class Time_Series_Plot extends Component {
        <CartesianGrid strokeDasharray="3 3"/>
        <Tooltip/>
        <Line type="monotone" dataKey="cases" stroke="#8884d8" activeDot={{r: 8}}>
-        <ErrorBar dataKey="bounds" strokeWidth={1} stroke="blue" direction="y" />
+        <ErrorBar dataKey="bounds" strokeWidth={1} stroke="lightBlue" direction="y" />
        </Line>
       </LineChart>
     );

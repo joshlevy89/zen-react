@@ -109,10 +109,11 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="Home">
         <h2 className="Title">Know More Malaria</h2>
         <div className="App-header">
           <div className="Selection-block">
+            <div className="Selection-block-title">Selections</div>
             <div className="Test-map">
               {this.state.disag_dict.region ?
                 <div className="Region-select-text">
@@ -144,10 +145,11 @@ export default class Home extends Component {
               options = {['all', 'male', 'female']}/>
               <Button className="Calculate-button"
               onClick={() => this.get_malaria_projection()}
-              bsStyle="success"
+              bsStyle="info"
               bsSize="large">Calculate</Button>
             </div>
             <div className="Time-series-plot">
+              <div className="Output-block-title">Output</div>
               {this.state.malaria_cases_showing ?
                 (<div>
                   <div className="Malaria-cases-text">

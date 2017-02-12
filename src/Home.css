@@ -1,25 +1,40 @@
-@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
 
-.App {
+.Home {
   font-family: 'Lato', sans-serif;
+    height: 100vh;
+
+    /* Set the width to match that of the viewport. */
+    width: 100vw;
+    background-color: #eeeeee;
 }
 
 .Title {
   text-align: center;
-  margin-top: 40px;
-  margin-bottom: 30px;
+  padding-top: 50px;
+  padding-bottom: 28px;
+  margin-bottom: 5px;
   font-size: 40px;
   color: purple;
+  background-color: #f2dede;
 }
 
 .Instructions {
   font-size: 25px;
   text-align: center;
+  margin-top: 50px;
 }
 
 .Selection-block {
   display: block;
-  width: 100%;
+}
+
+.Selection-block-title {
+  text-align: center;
+  font-size: 25px;
+  width: 42%;
+  font-weight: bold;
+  background-color: lightGray;
 }
 
 .Test-map{
@@ -63,6 +78,9 @@
 
 .Time-series-plot {
   display: inline-block;
+  background: white;
+  height: 340px;
+  width: 690px;
 }
 
 .Region-select-text {
@@ -92,4 +110,13 @@
 .Slides-link {
   float: right;
   padding-right: 20px;
+}
+
+.Output-block-title {
+  margin-top: -35px;
+  font-size: 25px;
+  width: 100%;
+  text-align: center;
+  background-color: lightGray;
+  font-weight: bold;
 }

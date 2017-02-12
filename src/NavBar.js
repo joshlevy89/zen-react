@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { Navbar, NavItem, Nav } from 'react-bootstrap';
 import { browserHistory } from 'react-router'
+import './NavBar.css';
+
 
 export default class NavBar extends Component{
   render() {
     return (
     <div>
-    <Navbar>
+    <Navbar className="navbar">
       <Navbar.Header>
           <Navbar.Brand>
             <a>Know More Malaria</a>
